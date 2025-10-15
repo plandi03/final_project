@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness & Gym Progress Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Authentication Page -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-box">
+            <div id="loginForm">
+                <h1>Welcome Back</h1>
+                <p>Login to continue your fitness journey</p>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" id="showRegisterLink">Register</a>
+                </div>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <h1>Create Account</h1>
+                <p>Start tracking your fitness progress today</p>
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Weight (kg)</label>
+                        <input type="number" id="regWeight" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Goal Weight (kg)</label>
+                        <input type="number" id="regGoalWeight" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Register</button>
+                </form>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" id="showLoginLink">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" class="app-container">
+        <nav class="navbar">
+            <h1>💪 FitTracker</h1>
+            <div class="navbar-right">
+                <span id="userName"></span>
+                <span class="logout-btn" id="logoutBtn">Logout</span>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div class="nav-tabs">
+                <button class="tab-btn active" data-section="dashboard">Dashboard</button>
+                <button class="tab-btn" data-section="exercises">Exercises</button>
+                <button class="tab-btn" data-section="nutrition">Nutrition</button>
+                <button class="tab-btn" data-section="workouts">Workouts</button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="dashboard-header">
+                    <h2>Dashboard</h2>
+                </div>
+
+                <div class="motivation-quote" id="motivationQuote"></div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Current Weight</h3>
+                        <div class="stat-value"><span id="currentWeight">0</span><span class="stat-unit">kg</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Goal Weight</h3>
+                        <div class="stat-value"><span id="goalWeight">0</span><span class="stat-unit">kg</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Workouts This Week</h3>
+                        <div class="stat-value"><span id="weekWorkouts">0</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Workouts</h3>
+                        <div class="stat-value"><span id="totalWorkouts">0</span></div>
+                    </div>
+                </div>
+
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h3>Weight Progress</h3>
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Weekly Activity</h3>
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercises Section -->
+            <div id="exercises" class="section">
+                <h2 style="margin-bottom: 20px;">Exercise Library</h2>
+                
+                <div class="exercise-filters">
+                    <div class="filter-group">
+                        <select id="muscleFilter">
+                            <option value="">All Muscles</option>
+                            <option value="chest">Chest</option>
+                            <option value="back">Back</option>
+                            <option value="shoulders">Shoulders</option>
+                            <option value="legs">Legs</option>
+                            <option value="arms">Arms</option>
+                        </select>
+                        <input type="text" id="searchExercise" placeholder="Search exercises...">
+                        <button class="btn" id="loadExercisesBtn" style="width: auto; padding: 10px 20px;">Load Exercises</button>
+                    </div>
+                </div>
+
+                <div id="exerciseGrid" class="exercise-grid">
+                    <div class="loading">Click "Load Exercises" to browse the exercise library</div>
+                </div>
+            </div>
+
+            <!-- Nutrition Section -->
+            <div id="nutrition" class="section">
+                <h2 style="margin-bottom: 20px;">Nutrition & Meal Ideas</h2>
+                
+                <div class="exercise-filters">
+                    <div class="filter-group">
+                        <input type="text" id="mealSearch" placeholder="Search meals (e.g., chicken, salad)...">
+                        <button class="btn" id="searchMealsBtn" style="width: auto; padding: 10px 20px;">Search Meals</button>
+                    </div>
+                </div>
+
+                <div id="mealGrid" class="meal-grid">
+                    <div class="loading">Enter a search term to find meal ideas</div>
+                </div>
+            </div>
+
+            <!-- Workouts Section -->
+            <div id="workouts" class="section">
+                <h2 style="margin-bottom: 20px;">Workout Planner</h2>
+                
+                <div class="workout-form">
+                    <h3>Create New Workout</h3>
+                    <form id="workoutFormElement">
+                        <div class="form-group">
+                            <label>Workout Name</label>
+                            <input type="text" id="workoutName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Exercises (comma separated)</label>
+                            <input type="text" id="workoutExercises" placeholder="e.g., Bench Press, Squats, Deadlift" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <input type="text" id="workoutNotes" placeholder="Optional notes">
+                        </div>
+                        <button type="submit" class="btn">Save Workout</button>
+                    </form>
+                </div>
+
+                <div class="workout-list">
+                    <h3>Saved Workouts</h3>
+                    <div id="workoutsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript modules -->
+    <script src="config/api-config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/exercise.js"></script>
+    <script src="js/nutrition.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
