@@ -7,7 +7,10 @@ export default defineConfig({
   server: {
     port: 3000,
     host: '0.0.0.0',
-    open: true
+    open: true,
+    allowedHosts: [
+      'final-project-2-nb0a.onrender.com'
+    ]
   },
   preview: {
     port: process.env.PORT || 10000,
