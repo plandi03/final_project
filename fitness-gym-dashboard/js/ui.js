@@ -44,6 +44,11 @@ export const UIManager = {
         if (activeTab) {
             activeTab.classList.add('active');
         }
+    
+        // Make sure 'exerciseSection' is handled
+        if (sectionName === 'exerciseSection') {
+            this.loadExercises();
+        }
     },
     
     // Setup workout form

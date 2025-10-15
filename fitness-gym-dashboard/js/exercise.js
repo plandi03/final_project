@@ -2,8 +2,6 @@
 import { API_CONFIG } from '../config/api-config.js';
 
 export const ExerciseManager = {
-    // ... (keep all existing code, but update displayExercises for Bootstrap)
-    
     exercises: [],
     filteredExercises: [],
     
@@ -141,7 +139,6 @@ export const ExerciseManager = {
     },
     
     // Display exercises
-    // Removed duplicate definition of displayExercises
     displayExercises(exercises) {
         const grid = document.getElementById('exerciseGrid');
 

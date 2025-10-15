@@ -1,9 +1,9 @@
 import { AuthManager } from './auth.js';
 import { DashboardManager } from './dashboard.js';
 import { UIManager } from './ui.js';
-import { ExerciseManager } from './exercise.js';
 import { NutritionManager } from './nutrition.js';
 import { API_CONFIG } from '../config/api-config.js';
+import { ExerciseManager } from './exercise.js'; // Import ExerciseManager
 
 // Set cross-references to avoid circular dependency
 AuthManager.setDashboardManager(DashboardManager);
@@ -14,8 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize all modules
     UIManager.init();
     AuthManager.init();
-    ExerciseManager.init();
     NutritionManager.init();
+
+    // Initialize ExerciseManager if available
+    if (ExerciseManager && ExerciseManager.init) {
+        ExerciseManager.init();
+    }
 
     console.log('🏋️ Fitness & Gym Progress Dashboard initialized!');
     console.log('📊 Demo mode:', API_CONFIG.demoMode);

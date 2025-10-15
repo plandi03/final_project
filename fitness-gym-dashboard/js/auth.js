@@ -164,3 +164,5 @@ export const AuthManager = {
         DashboardManager = manager;
     }
 };
+
+document.getElementById('exerciseSection'); // should not be null
