@@ -1,4 +1,5 @@
 // Nutrition Module - Handles Spoonacular API data
+import { API_CONFIG } from '../config/api-config.js';
 
 export const NutritionManager = {
     meals: [],
@@ -36,11 +37,19 @@ export const NutritionManager = {
         }
 
         const grid = document.getElementById('mealGrid');
-        grid.innerHTML = '<div class="loading">Searching meals...</div>';
+        grid.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Searching for delicious meals...</p>
+            </div>
+        `;
 
         try {
             if (API_CONFIG.demoMode) {
-                // Use demo data
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 800));
                 this.meals = this.getDemoMeals(searchTerm);
                 this.displayMeals(this.meals);
             } else {
@@ -67,7 +76,14 @@ export const NutritionManager = {
             }
         } catch (error) {
             console.error('Error searching meals:', error);
-            grid.innerHTML = '<div class="loading">Error loading meals. Please try again.</div>';
+            grid.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Error loading meals. Please try again.
+                    </div>
+                </div>
+            `;
         }
     },
 
@@ -76,7 +92,7 @@ export const NutritionManager = {
         return [
             {
                 title: `Grilled ${searchTerm} Salad`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Chicken+Salad',
+                image: 'https://via.placeholder.com/400x300/00C896/ffffff?text=Healthy+Salad',
                 calories: 350,
                 protein: 45,
                 carbs: 20,
@@ -84,7 +100,7 @@ export const NutritionManager = {
             },
             {
                 title: `${searchTerm} Protein Bowl`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Protein+Bowl',
+                image: 'https://via.placeholder.com/400x300/1E1E2F/ffffff?text=Protein+Bowl',
                 calories: 420,
                 protein: 38,
                 carbs: 45,
@@ -92,7 +108,7 @@ export const NutritionManager = {
             },
             {
                 title: `Healthy ${searchTerm} Wrap`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Healthy+Wrap',
+                image: 'https://via.placeholder.com/400x300/00C896/ffffff?text=Fresh+Wrap',
                 calories: 380,
                 protein: 32,
                 carbs: 42,
@@ -100,7 +116,7 @@ export const NutritionManager = {
             },
             {
                 title: `${searchTerm} Smoothie Bowl`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Smoothie+Bowl',
+                image: 'https://via.placeholder.com/400x300/FF6B6B/ffffff?text=Smoothie+Bowl',
                 calories: 280,
                 protein: 25,
                 carbs: 35,
@@ -108,7 +124,7 @@ export const NutritionManager = {
             },
             {
                 title: `Baked ${searchTerm} with Quinoa`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Quinoa+Bowl',
+                image: 'https://via.placeholder.com/400x300/4ECDC4/ffffff?text=Quinoa+Bowl',
                 calories: 520,
                 protein: 40,
                 carbs: 50,
@@ -116,7 +132,7 @@ export const NutritionManager = {
             },
             {
                 title: `${searchTerm} Stir Fry`,
-                image: 'https://via.placeholder.com/400x300/1E1E2F/00C896?text=Stir+Fry',
+                image: 'https://via.placeholder.com/400x300/FFE66D/333333?text=Stir+Fry',
                 calories: 390,
                 protein: 35,
                 carbs: 38,
@@ -130,31 +146,46 @@ export const NutritionManager = {
         const grid = document.getElementById('mealGrid');
 
         if (meals.length === 0) {
-            grid.innerHTML = '<div class="loading">No meals found</div>';
+            grid.innerHTML = `
+                <div class="col-12 empty-state">
+                    <i class="bi bi-emoji-frown"></i>
+                    <p class="fs-5">No meals found. Try a different search term.</p>
+                </div>
+            `;
             return;
         }
 
         grid.innerHTML = meals.map(meal => `
-            <div class="meal-card">
-                <img src="${meal.image}" alt="${meal.title}" class="meal-image">
-                <div class="meal-info">
-                    <h3>${meal.title}</h3>
-                    <div class="nutrition-facts">
-                        <div class="nutrition-item">
-                            <strong>${meal.calories}</strong>
-                            <span>Calories</span>
-                        </div>
-                        <div class="nutrition-item">
-                            <strong>${meal.protein}g</strong>
-                            <span>Protein</span>
-                        </div>
-                        <div class="nutrition-item">
-                            <strong>${meal.carbs}g</strong>
-                            <span>Carbs</span>
-                        </div>
-                        <div class="nutrition-item">
-                            <strong>${meal.fat}g</strong>
-                            <span>Fat</span>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="${meal.image}" alt="${meal.title}" class="card-img-top meal-card-img">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">${meal.title}</h5>
+                        <div class="row text-center g-2">
+                            <div class="col-3">
+                                <div class="p-2 rounded bg-success-subtle">
+                                    <strong class="text-success d-block fs-5">${meal.calories}</strong>
+                                    <small class="text-muted">Cal</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-2 rounded bg-primary-subtle">
+                                    <strong class="text-primary d-block fs-5">${meal.protein}g</strong>
+                                    <small class="text-muted">Protein</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-2 rounded bg-warning-subtle">
+                                    <strong class="text-warning d-block fs-5">${meal.carbs}g</strong>
+                                    <small class="text-muted">Carbs</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="p-2 rounded bg-danger-subtle">
+                                    <strong class="text-danger d-block fs-5">${meal.fat}g</strong>
+                                    <small class="text-muted">Fat</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
