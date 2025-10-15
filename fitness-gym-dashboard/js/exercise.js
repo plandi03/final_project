@@ -1,38 +1,41 @@
 // Exercise Module - Handles ExerciseDB API data
+import { API_CONFIG } from '../config/api-config.js';
 
-const ExerciseManager = {
+export const ExerciseManager = {
+    // ... (keep all existing code, but update displayExercises for Bootstrap)
+    
     exercises: [],
     filteredExercises: [],
-
+    
     // Initialize exercise module
     init() {
         this.setupEventListeners();
     },
-
+    
     // Setup event listeners
     setupEventListeners() {
         const loadBtn = document.getElementById('loadExercisesBtn');
         const muscleFilter = document.getElementById('muscleFilter');
         const searchInput = document.getElementById('searchExercise');
-
+    
         if (loadBtn) {
             loadBtn.addEventListener('click', () => this.loadExercises());
         }
-
+    
         if (muscleFilter) {
             muscleFilter.addEventListener('change', () => this.filterExercises());
         }
-
+    
         if (searchInput) {
             searchInput.addEventListener('input', () => this.filterExercises());
         }
     },
-
+    
     // Load exercises from API or demo data
     async loadExercises() {
         const grid = document.getElementById('exerciseGrid');
         grid.innerHTML = '<div class="loading">Loading exercises...</div>';
-
+    
         try {
             if (API_CONFIG.demoMode) {
                 // Use demo data
@@ -45,11 +48,11 @@ const ExerciseManager = {
                     method: 'GET',
                     headers: API_CONFIG.exerciseDB.headers
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Failed to fetch exercises');
                 }
-
+    
                 const data = await response.json();
                 this.exercises = data;
                 this.filteredExercises = [...this.exercises];
@@ -60,7 +63,7 @@ const ExerciseManager = {
             grid.innerHTML = '<div class="loading">Error loading exercises. Please try again.</div>';
         }
     },
-
+    
     // Get demo exercises
     getDemoExercises() {
         return [
@@ -122,38 +125,41 @@ const ExerciseManager = {
             }
         ];
     },
-
+    
     // Filter exercises
     filterExercises() {
         const muscleFilter = document.getElementById('muscleFilter').value.toLowerCase();
         const searchTerm = document.getElementById('searchExercise').value.toLowerCase();
-
+    
         this.filteredExercises = this.exercises.filter(ex => {
             const matchesMuscle = !muscleFilter || ex.bodyPart.toLowerCase().includes(muscleFilter);
             const matchesSearch = !searchTerm || ex.name.toLowerCase().includes(searchTerm);
             return matchesMuscle && matchesSearch;
         });
-
+    
         this.displayExercises(this.filteredExercises);
     },
-
+    
     // Display exercises
+    // Removed duplicate definition of displayExercises
     displayExercises(exercises) {
         const grid = document.getElementById('exerciseGrid');
 
         if (exercises.length === 0) {
-            grid.innerHTML = '<div class="loading">No exercises found</div>';
+            grid.innerHTML = '<div class="col-12 text-center text-muted py-5">No exercises found</div>';
             return;
         }
 
         grid.innerHTML = exercises.map(ex => `
-            <div class="exercise-card">
-                <img src="${ex.gifUrl}" alt="${ex.name}" class="exercise-image">
-                <div class="exercise-info">
-                    <h3>${ex.name}</h3>
-                    <div class="exercise-meta">
-                        <span class="badge">${ex.bodyPart}</span>
-                        <span class="badge badge-secondary">${ex.equipment}</span>
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm">
+                    <img src="${ex.gifUrl}" alt="${ex.name}" class="card-img-top exercise-card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${ex.name}</h5>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-success">${ex.bodyPart}</span>
+                            <span class="badge bg-primary">${ex.equipment}</span>
+                        </div>
                     </div>
                 </div>
             </div>

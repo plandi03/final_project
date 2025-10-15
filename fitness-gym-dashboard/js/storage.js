@@ -1,7 +1,6 @@
 // Storage Module - Handles all data persistence
-// NOTE: Using in-memory storage for demo. Replace with backend in production.
 
-const StorageManager = {
+export const StorageManager = {
     // In-memory storage as fallback
     memoryStorage: {
         users: [],

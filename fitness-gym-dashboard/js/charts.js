@@ -1,6 +1,6 @@
 // Charts Module - Implements graphs using Chart.js
 
-const ChartsManager = {
+export const ChartsManager = {
     weightChart: null,
     activityChart: null,
 

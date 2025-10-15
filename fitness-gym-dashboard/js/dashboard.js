@@ -1,6 +1,11 @@
 // Dashboard Module - Manages dashboard display and statistics
+import { StorageManager } from './storage.js';
+import { ChartsManager } from './charts.js';
 
-const DashboardManager = {
+// Forward declaration for AuthManager to avoid circular dependency
+let AuthManager;
+
+export const DashboardManager = {
     currentUser: null,
     
     quotes: [
@@ -111,5 +116,9 @@ const DashboardManager = {
         
         // Refresh dashboard
         this.refresh();
+    },
+
+    setAuthManager(manager) {
+        AuthManager = manager;
     }
 };

@@ -1,6 +1,10 @@
 // Authentication Module - Handles user registration and login
+import { StorageManager } from './storage.js';
 
-const AuthManager = {
+// Forward declaration for DashboardManager to avoid circular dependency
+let DashboardManager;
+
+export const AuthManager = {
     currentUser: null,
 
     // Initialize authentication
@@ -154,5 +158,9 @@ const AuthManager = {
     updateCurrentUser(updatedUser) {
         this.currentUser = updatedUser;
         StorageManager.updateUser(updatedUser);
+    },
+
+    setDashboardManager(manager) {
+        DashboardManager = manager;
     }
 };

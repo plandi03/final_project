@@ -1,10 +1,19 @@
-// Main Application Entry Point
-// Initializes all modules and manages app lifecycle
+import { AuthManager } from './auth.js';
+import { DashboardManager } from './dashboard.js';
+import { UIManager } from './ui.js';
+import { ExerciseManager } from './exercise.js';
+import { NutritionManager } from './nutrition.js';
+import { API_CONFIG } from '../config/api-config.js';
 
+// Set cross-references to avoid circular dependency
+AuthManager.setDashboardManager(DashboardManager);
+DashboardManager.setAuthManager(AuthManager);
+
+// Initialize UI and Auth
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all modules
-    AuthManager.init();
     UIManager.init();
+    AuthManager.init();
     ExerciseManager.init();
     NutritionManager.init();
 
@@ -23,7 +32,6 @@ window.addEventListener('error', (e) => {
 
 // Handle browser back/forward buttons
 window.addEventListener('popstate', () => {
-    // Refresh current view
     const currentUser = AuthManager.getCurrentUser();
     if (currentUser) {
         DashboardManager.refresh();

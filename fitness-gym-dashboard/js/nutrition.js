@@ -1,6 +1,6 @@
 // Nutrition Module - Handles Spoonacular API data
 
-const NutritionManager = {
+export const NutritionManager = {
     meals: [],
 
     // Initialize nutrition module
