@@ -17,5 +17,5 @@ export const API_CONFIG = {
     },
     
     // Demo mode (set to false when using real APIs)
-    demoMode: true
+    demoMode: false
 };
