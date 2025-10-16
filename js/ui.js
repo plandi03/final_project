@@ -123,6 +123,7 @@ export const UIManager = {
         }
     },
     
+    
     // Show error message
     showError(containerId, message) {
         const container = document.getElementById(containerId);
