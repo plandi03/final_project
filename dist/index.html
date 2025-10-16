@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness & Gym Progress Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+  <script type="module" crossorigin src="/assets/main-Bys07DA4.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-DMOLCzmn.css">
+</head>
+<body>
+    <!-- Authentication Page -->
+    <div id="authContainer" class="auth-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5 col-lg-4">
+                    <div class="auth-box card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <!-- Login Form -->
+                            <div id="loginForm">
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-heart-pulse-fill text-success" style="font-size: 3rem;"></i>
+                                    <h1 class="mt-3 mb-2">Welcome Back</h1>
+                                    <p class="text-muted">Login to continue your fitness journey</p>
+                                </div>
+                                <form id="loginFormElement">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Email Address</label>
+                                        <input type="email" class="form-control form-control-lg" id="loginEmail" placeholder="your@email.com" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label fw-semibold">Password</label>
+                                        <input type="password" class="form-control form-control-lg" id="loginPassword" placeholder="Enter password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                                        <i class="bi bi-box-arrow-in-right"></i> Login
+                                    </button>
+                                </form>
+                                <div class="text-center">
+                                    <small class="text-muted">
+                                        Don't have an account? 
+                                        <a href="#" id="showRegisterLink" class="text-success fw-bold text-decoration-none">Create Account</a>
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Register Form -->
+                            <div id="registerForm" style="display: none;">
+                                <div class="text-center mb-4">
+                                    <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
+                                    <h1 class="mt-3 mb-2">Create Account</h1>
+                                    <p class="text-muted">Start tracking your fitness progress today</p>
+                                </div>
+                                <form id="registerFormElement">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Full Name</label>
+                                        <input type="text" class="form-control" id="regName" placeholder="John Doe" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Email Address</label>
+                                        <input type="email" class="form-control" id="regEmail" placeholder="your@email.com" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Password</label>
+                                        <input type="password" class="form-control" id="regPassword" placeholder="Create a password" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label fw-semibold">Current (kg)</label>
+                                            <input type="number" step="0.1" class="form-control" id="regWeight" placeholder="70" required>
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label fw-semibold">Goal (kg)</label>
+                                            <input type="number" step="0.1" class="form-control" id="regGoalWeight" placeholder="65" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                        <i class="bi bi-check-circle"></i> Register
+                                    </button>
+                                </form>
+                                <div class="text-center">
+                                    <small class="text-muted">
+                                        Already have an account? 
+                                        <a href="#" id="showLoginLink" class="text-success fw-bold text-decoration-none">Sign In</a>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" class="app-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark navbar-custom shadow">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <i class="bi bi-heart-pulse-fill me-2" style="font-size: 1.5rem;"></i>
+                    <span class="fw-bold">FitTracker</span>
+                </a>
+                <div class="d-flex align-items-center">
+                    <div class="user-info me-3">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span id="userName" class="fw-semibold"></span>
+                    </div>
+                    <button class="btn btn-success btn-sm" id="logoutBtn">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid py-4 px-4">
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-pills nav-fill mb-4 shadow-sm bg-white rounded p-2">
+                <li class="nav-item">
+                    <button class="nav-link active" data-section="dashboard">
+                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-section="exercises">
+                        <i class="bi bi-bicycle me-2"></i>Exercises
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-section="nutrition">
+                        <i class="bi bi-cup-straw me-2"></i>Nutrition
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-section="workouts">
+                        <i class="bi bi-clipboard-check me-2"></i>Workouts
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0"><i class="bi bi-house-fill text-success me-2"></i>Dashboard</h2>
+                        <span class="badge bg-success-subtle text-success fs-6">
+                            <i class="bi bi-calendar3"></i> Today: <span id="currentDate"></span>
+                        </span>
+                    </div>
+
+                    <!-- Motivation Quote -->
+                    <div class="alert alert-success border-0 shadow-sm mb-4 quote-card">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-quote fs-1 text-success me-3"></i>
+                            <div>
+                                <span id="motivationQuote" class="fst-italic fs-5"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card stat-card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <p class="text-uppercase text-muted mb-2 fw-semibold small">Current Weight</p>
+                                            <h2 class="mb-0 fw-bold">
+                                                <span id="currentWeight">0</span>
+                                                <small class="text-muted fs-5">kg</small>
+                                            </h2>
+                                        </div>
+                                        <div class="icon-box bg-primary-subtle">
+                                            <i class="bi bi-speedometer text-primary fs-4"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card stat-card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <p class="text-uppercase text-muted mb-2 fw-semibold small">Goal Weight</p>
+                                            <h2 class="mb-0 fw-bold">
+                                                <span id="goalWeight">0</span>
+                                                <small class="text-muted fs-5">kg</small>
+                                            </h2>
+                                        </div>
+                                        <div class="icon-box bg-success-subtle">
+                                            <i class="bi bi-bullseye text-success fs-4"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card stat-card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <p class="text-uppercase text-muted mb-2 fw-semibold small">This Week</p>
+                                            <h2 class="mb-0 fw-bold" id="weekWorkouts">0</h2>
+                                            <small class="text-muted">workouts</small>
+                                        </div>
+                                        <div class="icon-box bg-warning-subtle">
+                                            <i class="bi bi-calendar-week text-warning fs-4"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card stat-card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <p class="text-uppercase text-muted mb-2 fw-semibold small">Total</p>
+                                            <h2 class="mb-0 fw-bold" id="totalWorkouts">0</h2>
+                                            <small class="text-muted">workouts</small>
+                                        </div>
+                                        <div class="icon-box bg-info-subtle">
+                                            <i class="bi bi-trophy text-info fs-4"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0 pt-4">
+                                    <h5 class="mb-0 fw-bold">
+                                        <i class="bi bi-graph-up text-success me-2"></i>Weight Progress
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="weightChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0 pt-4">
+                                    <h5 class="mb-0 fw-bold">
+                                        <i class="bi bi-bar-chart text-primary me-2"></i>Weekly Activity
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="activityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercises Section -->
+            <div id="exercises" class="section">
+                <div class="container-fluid">
+                    <h2 class="mb-4"><i class="bi bi-bicycle text-primary me-2"></i>Exercise Library</h2>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold small">Filter by Muscle</label>
+                                    <select class="form-select" id="muscleFilter">
+                                        <option value="">All Muscles</option>
+                                        <option value="chest">Chest</option>
+                                        <option value="back">Back</option>
+                                        <option value="shoulders">Shoulders</option>
+                                        <option value="legs">Legs</option>
+                                        <option value="arms">Arms</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label fw-semibold small">Search Exercise</label>
+                                    <input type="text" class="form-control" id="searchExercise" placeholder="Type to search...">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small d-none d-md-block">&nbsp;</label>
+                                    <button class="btn btn-success w-100" id="loadExercisesBtn">
+                                        <i class="bi bi-search"></i> Load Exercises
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="exerciseGrid" class="row g-4">
+                        <div class="col-12 text-center text-muted py-5">
+                            <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+                            <p class="fs-5">Click "Load Exercises" to browse the exercise library</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Section -->
+            <div id="nutrition" class="section">
+                <div class="container-fluid">
+                    <h2 class="mb-4"><i class="bi bi-cup-straw text-warning me-2"></i>Nutrition & Meal Ideas</h2>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-9">
+                                    <label class="form-label fw-semibold small">Search Meals</label>
+                                    <input type="text" class="form-control" id="mealSearch" placeholder="e.g., chicken, salad, pasta...">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small d-none d-md-block">&nbsp;</label>
+                                    <button class="btn btn-success w-100" id="searchMealsBtn">
+                                        <i class="bi bi-search"></i> Search Meals
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mealGrid" class="row g-4">
+                        <div class="col-12 text-center text-muted py-5">
+                            <i class="bi bi-egg-fried fs-1 d-block mb-3"></i>
+                            <p class="fs-5">Enter a search term to find healthy meal ideas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workouts Section -->
+            <div id="workouts" class="section">
+                <div class="container-fluid">
+                    <h2 class="mb-4"><i class="bi bi-clipboard-check text-info me-2"></i>Workout Planner</h2>
+                    
+                    <div class="row g-4">
+                        <div class="col-lg-5">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Create New Workout</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="workoutFormElement">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Workout Name</label>
+                                            <input type="text" class="form-control" id="workoutName" placeholder="e.g., Morning Routine" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Exercises</label>
+                                            <input type="text" class="form-control" id="workoutExercises" 
+                                                   placeholder="Bench Press, Squats, Deadlift" required>
+                                            <small class="form-text text-muted">Separate exercises with commas</small>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Notes (Optional)</label>
+                                            <textarea class="form-control" id="workoutNotes" rows="3" 
+                                                      placeholder="Add any additional notes..."></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="bi bi-save"></i> Save Workout
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-white border-0">
+                                    <h5 class="mb-0 fw-bold"><i class="bi bi-list-ul me-2"></i>Saved Workouts</h5>
+                                </div>
+                                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                                    <div id="workoutsList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    
+    <!-- Chart.js CDN (more reliable) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Load JavaScript modules -->
+</body>
+</html>
