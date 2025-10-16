@@ -13,6 +13,8 @@ export const NutritionManager = {
     setupEventListeners() {
         const searchBtn = document.getElementById('searchMealsBtn');
         const searchInput = document.getElementById('mealSearch');
+        const tryBtn = document.getElementById('tryRecipesApiBtn');
+        const docsQueryInput = document.getElementById('docsQuery');
 
         if (searchBtn) {
             searchBtn.addEventListener('click', () => this.searchMeals());
@@ -25,37 +27,62 @@ export const NutritionManager = {
                 }
             });
         }
+
+        // Docs "Try It" button
+        if (tryBtn) {
+            tryBtn.addEventListener('click', () => {
+                const term = (document.getElementById('docsQuery')?.value || '').trim();
+                this.searchMealsWithTerm(term, 'docsResultGrid');
+            });
+        }
+
+        if (docsQueryInput) {
+            docsQueryInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const term = (e.currentTarget?.value || '').trim();
+                    this.searchMealsWithTerm(term, 'docsResultGrid');
+                }
+            });
+        }
     },
 
-    // Search for meals
+    // Search for meals using default inputs
     async searchMeals() {
         const searchTerm = document.getElementById('mealSearch').value;
+        await this.searchMealsWithTerm(searchTerm, 'mealGrid');
+    },
 
-        if (!searchTerm) {
+    // Core search function used by both Nutrition and Docs sections
+    async searchMealsWithTerm(searchTerm, targetGridId = 'mealGrid') {
+        const term = (searchTerm || '').trim();
+
+        if (!term) {
             alert('Please enter a search term');
             return;
         }
 
-        const grid = document.getElementById('mealGrid');
-        grid.innerHTML = `
-            <div class="col-12 text-center py-5">
-                <div class="spinner-border text-success" role="status">
-                    <span class="visually-hidden">Loading...</span>
+        const grid = document.getElementById(targetGridId);
+        if (grid) {
+            grid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Searching for delicious meals...</p>
                 </div>
-                <p class="mt-3 text-muted">Searching for delicious meals...</p>
-            </div>
-        `;
+            `;
+        }
 
         try {
             if (API_CONFIG.demoMode) {
                 // Simulate API delay
                 await new Promise(resolve => setTimeout(resolve, 800));
-                this.meals = this.getDemoMeals(searchTerm);
-                this.displayMeals(this.meals);
+                this.meals = this.getDemoMeals(term);
+                this.displayMeals(this.meals, targetGridId);
             } else {
                 // Fetch from Spoonacular API
                 const response = await fetch(
-                    `${API_CONFIG.spoonacular.baseUrl}/recipes/complexSearch?query=${searchTerm}&number=12&addRecipeNutrition=true&apiKey=${API_CONFIG.spoonacular.apiKey}`
+                    `${API_CONFIG.spoonacular.baseUrl}/recipes/complexSearch?query=${encodeURIComponent(term)}&number=12&addRecipeNutrition=true&apiKey=${API_CONFIG.spoonacular.apiKey}`
                 );
 
                 if (!response.ok) {
@@ -63,7 +90,7 @@ export const NutritionManager = {
                 }
 
                 const data = await response.json();
-                this.meals = data.results.map(meal => ({
+                this.meals = (data.results || []).map(meal => ({
                     title: meal.title,
                     image: meal.image,
                     calories: Math.round(meal.nutrition?.nutrients?.find(n => n.name === 'Calories')?.amount || 0),
@@ -71,19 +98,21 @@ export const NutritionManager = {
                     carbs: Math.round(meal.nutrition?.nutrients?.find(n => n.name === 'Carbohydrates')?.amount || 0),
                     fat: Math.round(meal.nutrition?.nutrients?.find(n => n.name === 'Fat')?.amount || 0)
                 }));
-                
-                this.displayMeals(this.meals);
+
+                this.displayMeals(this.meals, targetGridId);
             }
         } catch (error) {
             console.error('Error searching meals:', error);
-            grid.innerHTML = `
-                <div class="col-12">
-                    <div class="alert alert-danger" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        Error loading meals. Please try again.
+            if (grid) {
+                grid.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Error loading meals. Please try again.
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }
     },
 
@@ -142,8 +171,8 @@ export const NutritionManager = {
     },
 
     // Display meals
-    displayMeals(meals) {
-        const grid = document.getElementById('mealGrid');
+    displayMeals(meals, targetGridId = 'mealGrid') {
+        const grid = document.getElementById(targetGridId);
 
         if (meals.length === 0) {
             grid.innerHTML = `
