@@ -4,10 +4,10 @@
   "description": "A comprehensive web application for tracking workouts, monitoring fitness progress, and managing nutrition goals",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite preview --port $PORT --host 0.0.0.0"
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview",
+  "start": "node server.js"
   },
   "keywords": [
     "fitness",
@@ -22,7 +22,9 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
-    "chart.js": "^4.4.1"
+    "chart.js": "^4.4.1",
+    "express": "^4.18.2",
+    "compression": "^1.7.4"
   },
   "devDependencies": {
     "serve": "^14.2.5",
