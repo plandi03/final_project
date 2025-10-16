@@ -165,4 +165,4 @@ export const AuthManager = {
     }
 };
 
-document.getElementById('exerciseSection'); // should not be null
+document.getElementById('exerciseSection');
